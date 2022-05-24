@@ -22,7 +22,8 @@ const mouseStyles: CSSProperties = {
   pointerEvents: 'none',
   position: 'fixed',
   zIndex: 100,
-  backgroundColor: 'black',
+  backgroundColor: 'white',
+  mixBlendMode: 'difference',
 };
 
 const MouseStalker: FC = () => {
