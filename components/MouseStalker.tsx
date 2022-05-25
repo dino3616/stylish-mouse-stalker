@@ -27,7 +27,7 @@ const mouseStyles: CSSProperties = {
 };
 
 const MouseStalker: FC = () => {
-  const springStyles = useMouseStalker(initMouse, springConfig);
+  const springStyles = useMouseStalker(initMouse, springConfig, 3);
 
   return (
     <animated.div
