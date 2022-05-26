@@ -1,6 +1,5 @@
 import { useEffect } from 'react';
 import { SpringRef } from 'react-spring';
-import { useIsOver, useSetIsOver } from '../contexts/MouseContext';
 
 export type Mouse = {
   width: number;
@@ -11,9 +10,9 @@ export type Mouse = {
   left: number;
 };
 
-const useMouseMove = (initMouse: Mouse, setSpringStyles: SpringRef<Mouse>, times: number) => {
-  const isOver = useIsOver();
+let isOver: boolean | undefined = undefined;
 
+const useMouseMove = (initMouse: Mouse, setSpringStyles: SpringRef<Mouse>, times: number) => {
   useEffect(() => {
     const listener = (e: MouseEvent) => {
       if (isOver) {
@@ -38,12 +37,10 @@ const useMouseMove = (initMouse: Mouse, setSpringStyles: SpringRef<Mouse>, times
     return () => {
       window.removeEventListener('mousemove', listener);
     };
-  }, [setSpringStyles, initMouse, times, isOver]);
+  }, [setSpringStyles, initMouse, times]);
 };
 
 const useMouseOver = (initMouse: Mouse, setSpringStyles: SpringRef<Mouse>, times: number, tag: string) => {
-  const setIsOver = useSetIsOver();
-
   useEffect(() => {
     const elements = document.querySelectorAll(tag);
     const listener = () => {
@@ -53,7 +50,7 @@ const useMouseOver = (initMouse: Mouse, setSpringStyles: SpringRef<Mouse>, times
         borderRadius: initMouse.borderRadius * times,
       });
 
-      setIsOver(true);
+      isOver = true;
     };
 
     elements.forEach((element) => {
@@ -65,12 +62,10 @@ const useMouseOver = (initMouse: Mouse, setSpringStyles: SpringRef<Mouse>, times
         element.removeEventListener('mouseover', listener);
       });
     };
-  }, [initMouse, setSpringStyles, times, tag, setIsOver]);
+  }, [initMouse, setSpringStyles, times, tag]);
 };
 
 const useMouseOut = (initMouse: Mouse, setSpringStyles: SpringRef<Mouse>, times: number, tag: string) => {
-  const setIsOver = useSetIsOver();
-
   useEffect(() => {
     const elements = document.querySelectorAll(tag);
     const listener = () => {
@@ -80,7 +75,7 @@ const useMouseOut = (initMouse: Mouse, setSpringStyles: SpringRef<Mouse>, times:
         borderRadius: initMouse.borderRadius,
       });
 
-      setIsOver(false);
+      isOver = false;
     };
 
     elements.forEach((element) => {
@@ -92,7 +87,7 @@ const useMouseOut = (initMouse: Mouse, setSpringStyles: SpringRef<Mouse>, times:
         element.removeEventListener('mouseout', listener);
       });
     };
-  }, [initMouse, setSpringStyles, times, tag, setIsOver]);
+  }, [initMouse, setSpringStyles, times, tag]);
 };
 
 export { useMouseMove, useMouseOver, useMouseOut };
